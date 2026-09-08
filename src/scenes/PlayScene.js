@@ -55,6 +55,7 @@ class PlayScene extends Phaser.Scene {
   _buildWorld(levelData) {
     this.groundGroup = this.physics.add.staticGroup();
     levelData.ground.forEach((span) => this._fillSpan(this.groundGroup, span.x1, span.x2, span.y, 'ground', 64, 64));
+    this._buildUndergroundFill(levelData);
 
     this.platformGroup = this.physics.add.staticGroup();
     (levelData.platforms || []).forEach((span) => this._fillSpan(this.platformGroup, span.x1, span.x2, span.y, 'platform', 64, 20));
@@ -78,6 +79,21 @@ class PlayScene extends Phaser.Scene {
 
     this.enemyGroup = this.physics.add.group();
     (levelData.enemies || []).forEach((e) => this.enemyGroup.add(new Enemy(this, e.x, e.y, e)));
+  }
+
+  // Solid-color fill directly beneath each ground span, down to the level's
+  // full height, so a taller-than-usual viewport (a tablet, a maximized
+  // desktop window) never reveals blank space under the ground strip.
+  // Deliberately left out under gaps/pits — a gap dropping into open sky is
+  // the intended hazard visual, not something to patch over.
+  _buildUndergroundFill(levelData) {
+    var fillColor = 0x6b4a2b;
+    levelData.ground.forEach((span) => {
+      var top = span.y + 64;
+      var height = levelData.height - top;
+      if (height <= 0) return;
+      this.add.rectangle(span.x1 + (span.x2 - span.x1) / 2, top + height / 2, span.x2 - span.x1, height, fillColor).setOrigin(0.5);
+    });
   }
 
   _buildBoss(levelData) {
@@ -220,7 +236,22 @@ class PlayScene extends Phaser.Scene {
       this.tweens.add({ targets: t, alpha: 0, delay: 2400, duration: 600, onComplete: () => t.destroy() });
     });
 
+    this.scale.on('resize', () => this._layoutHud());
     this._refreshHud();
+  }
+
+  // Repositions the HUD elements anchored to the canvas edges/center —
+  // called on creation and again whenever the canvas is resized (device
+  // rotation, browser window resize).
+  _layoutHud() {
+    var w = this.scale.width;
+    this.coinText.setPosition(w - 20, 20);
+    this.throwText.setPosition(w - 20, 46);
+    if (this.bossBarBg) {
+      this.bossBarBg.setPosition(w / 2, 26);
+      this.bossBarFill.setPosition(w / 2 - 128, 26);
+      this.bossNameText.setPosition(w / 2, 10);
+    }
   }
 
   _refreshHud() {

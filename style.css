@@ -21,3 +21,40 @@ html, body {
 #game-container canvas {
   touch-action: none;
 }
+
+#rotate-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #0d1117;
+  color: #e7edf5;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+#rotate-icon {
+  font-size: 56px;
+  animation: rotate-hint 1.6s ease-in-out infinite;
+}
+
+#rotate-text {
+  font-size: 18px;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+@keyframes rotate-hint {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
+
+/* Touch devices in portrait: hide the game, show the rotate prompt. */
+@media (orientation: portrait) and (pointer: coarse) {
+  #game-container { display: none; }
+  #rotate-prompt { display: flex; }
+}

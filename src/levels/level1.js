@@ -9,7 +9,7 @@
     key: 'level1',
     name: 'The Garden Path',
     width: 2450,
-    height: 540,
+    height: 900, // taller than the playable strip so wide/tall viewports never see blank space below the ground
     bgColor: 0x9fd8ef,
     playerStart: { x: 80, y: 400 },
 

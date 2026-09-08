@@ -9,7 +9,7 @@
     key: 'level2',
     name: 'Bramble Bridge',
     width: 2650,
-    height: 540,
+    height: 900, // taller than the playable strip so wide/tall viewports never see blank space below the ground
     bgColor: 0x7fd0ce,
     playerStart: { x: 80, y: 400 },
 

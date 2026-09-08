@@ -41,14 +41,19 @@ class TouchControls {
   _build() {
     var w = this.scene.scale.width;
     var h = this.scene.scale.height;
-    var r = Math.max(30, Math.min(w, h) * 0.07);
+    // The canvas now renders 1:1 with real device pixels (no more scaling
+    // a fixed logical size up/down), so this radius IS the on-screen touch
+    // target size — sized for comfortable phone-landscape thumbs (roughly
+    // Apple/Google's ~44pt minimum tap target, generous on tablets, capped
+    // so it doesn't balloon on very tall/wide windows).
+    var r = Phaser.Math.Clamp(Math.min(w, h) * 0.12, 42, 68);
 
-    this.leftBtn = this._makeButton('◀', null, 'left', r * 1.4, h - r * 1.4, r);
-    this.rightBtn = this._makeButton('▶', null, 'right', r * 3.2, h - r * 1.4, r);
+    this.leftBtn = this._makeButton('◀', null, 'left', r * 1.5, h - r * 1.6, r);
+    this.rightBtn = this._makeButton('▶', null, 'right', r * 3.4, h - r * 1.6, r);
 
-    this.jumpBtn = this._makeButton('⤒', 'JUMP', 'jump', w - r * 1.4, h - r * 1.4, r);
-    this.swordBtn = this._makeButton('⚔', 'SWORD', 'sword', w - r * 3.2, h - r * 2.6, r * 0.85);
-    this.throwBtn = this._makeButton('●', 'THROW', 'throw', w - r * 1.4, h - r * 3.2, r * 0.85);
+    this.jumpBtn = this._makeButton('⤒', 'JUMP', 'jump', w - r * 1.5, h - r * 1.6, r);
+    this.swordBtn = this._makeButton('⚔', 'SWORD', 'sword', w - r * 3.5, h - r * 2.8, r * 0.85);
+    this.throwBtn = this._makeButton('●', 'THROW', 'throw', w - r * 1.5, h - r * 3.5, r * 0.85);
   }
 
   _reposition() {
