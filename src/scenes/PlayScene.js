@@ -11,6 +11,11 @@ class PlayScene extends Phaser.Scene {
     this.goalReached = false;
 
     this.physics.world.setBounds(0, 0, levelData.width, levelData.height);
+    // Solid on the left/right/top, but NOT the bottom — falling into a pit
+    // has to actually fall out of the world so the fall-death check below
+    // can fire, otherwise "collide with world bounds" quietly catches the
+    // player on an invisible floor and the game looks stuck forever.
+    this.physics.world.setBoundsCollision(true, true, true, false);
     this.cameras.main.setBackgroundColor(levelData.bgColor || 0x9fd8ef);
 
     this._buildBackground(levelData);
@@ -275,6 +280,18 @@ class PlayScene extends Phaser.Scene {
       if (this.bossBarBg) { this.bossBarBg.destroy(); this.bossBarFill.destroy(); this.bossNameText.destroy(); }
     });
     this.events.on('playerDied', () => this._onPlayerDied());
+    this.events.on('throwEmpty', () => this._flashNoAcorns());
+  }
+
+  _flashNoAcorns() {
+    this.throwText.setColor('#ff6b6b');
+    this.tweens.add({
+      targets: this.throwText,
+      scale: 1.3,
+      duration: 90,
+      yoyo: true,
+      onComplete: () => this.throwText.setColor('#ffffff')
+    });
   }
 
   // ---------- flow ----------
@@ -324,7 +341,7 @@ class PlayScene extends Phaser.Scene {
     this.enemyGroup.getChildren().forEach((e) => e.update());
     if (this.boss) this.boss.update();
 
-    if (this.player.y > this.levelData.height + 100) {
+    if (this.player.y > this.levelData.groundY + 220) {
       this.player.respawnAtCheckpoint(this.levelData.playerStart.x, this.levelData.playerStart.y);
     }
   }

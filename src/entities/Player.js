@@ -65,23 +65,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   swingSword() {
     var now = this.scene.time.now;
     if (now < this._swordCooldownUntil) return;
-    this._swordCooldownUntil = now + 380;
+    this._swordCooldownUntil = now + 340;
 
     this.swordActive = true;
     this.swordSprite.setVisible(true);
+    this.swordSprite.setAlpha(1);
     this.swordSprite.body.enable = true;
-    this.swordSprite.setScale(0.75);
-    this.swordSprite.angle = this.facing === 1 ? -60 : -120;
+    this.swordSprite.setScale(0.82);
+    this.swordSprite.angle = this.facing === 1 ? -55 : -125;
 
     this.scene.tweens.add({
       targets: this.swordSprite,
-      angle: this.facing === 1 ? 50 : 230,
+      angle: this.facing === 1 ? 45 : 225,
       scale: 1,
-      duration: 150,
-      ease: 'Back.easeOut'
+      duration: 190,
+      ease: 'Sine.easeOut'
+    });
+    this.scene.tweens.add({
+      targets: this.swordSprite,
+      alpha: 0,
+      delay: 120,
+      duration: 95,
+      ease: 'Sine.easeIn'
     });
 
-    this.scene.time.delayedCall(160, () => {
+    this.scene.time.delayedCall(215, () => {
       this.swordActive = false;
       this.swordSprite.setVisible(false);
       this.swordSprite.body.enable = false;
@@ -91,7 +99,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   throwItem() {
     var now = this.scene.time.now;
     if (now < this._throwCooldownUntil) return;
-    if (this.throwCount <= 0) return;
+    if (this.throwCount <= 0) {
+      this.scene.events.emit('throwEmpty');
+      return;
+    }
     this._throwCooldownUntil = now + 350;
 
     this.throwCount -= 1;

@@ -10,6 +10,7 @@
     name: 'The Garden Path',
     width: 2450,
     height: 900, // taller than the playable strip so wide/tall viewports never see blank space below the ground
+    groundY: GROUND_Y, // used to detect "fell into a pit" promptly, independent of the taller background height above
     bgColor: 0x9fd8ef,
     playerStart: { x: 80, y: 400 },
 
@@ -40,7 +41,7 @@
       { x: 1300, y: 210 }, { x: 1340, y: 170 }
     ],
     throwPickups: [
-      { x: 600, y: 420 }, { x: 1800, y: 400 }, { x: 2150, y: 420 }
+      { x: 180, y: 420 }, { x: 600, y: 420 }, { x: 1800, y: 400 }, { x: 2150, y: 420 }
     ],
     enemies: [
       { x: 750, y: 468, minX: 680, maxX: 850, hp: 1 },

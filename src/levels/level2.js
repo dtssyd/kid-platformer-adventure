@@ -10,6 +10,7 @@
     name: 'Bramble Bridge',
     width: 2650,
     height: 900, // taller than the playable strip so wide/tall viewports never see blank space below the ground
+    groundY: GROUND_Y, // used to detect "fell into a pit" promptly, independent of the taller background height above
     bgColor: 0x7fd0ce,
     playerStart: { x: 80, y: 400 },
 
@@ -40,7 +41,7 @@
       { x: 1900, y: 400 }, { x: 1940, y: 380 }
     ],
     throwPickups: [
-      { x: 900, y: 420 }, { x: 2050, y: 420 }, { x: 2150, y: 420 }
+      { x: 250, y: 420 }, { x: 900, y: 420 }, { x: 2050, y: 420 }, { x: 2150, y: 420 }
     ],
     enemies: [
       { x: 850, y: 468, minX: 780, maxX: 950, hp: 1 },
