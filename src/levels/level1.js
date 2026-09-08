@@ -23,7 +23,13 @@
 
     spikes: [
       { x: 440, y: 464 }, { x: 472, y: 464 }, { x: 504, y: 464 },
-      { x: 1000, y: 464 }, { x: 1032, y: 464 }, { x: 1064, y: 464 }, { x: 1096, y: 464 }
+      // A long spike bed, too wide to jump straight over — the moving
+      // platform below is the intended way across.
+      { x: 1000, y: 464 }, { x: 1032, y: 464 }, { x: 1064, y: 464 }, { x: 1096, y: 464 },
+      { x: 1128, y: 464 }, { x: 1160, y: 464 }, { x: 1192, y: 464 }, { x: 1224, y: 464 }, { x: 1256, y: 464 }
+    ],
+    movingPlatforms: [
+      { x: 1000, y: 390, minX: 980, maxX: 1260, speed: 65, startDirection: 1 }
     ],
     springs: [
       { x: 1300, y: 468 }
@@ -37,7 +43,7 @@
     coins: [
       { x: 200, y: 420 }, { x: 240, y: 400 }, { x: 280, y: 420 },
       { x: 456, y: 340 }, { x: 488, y: 300 }, { x: 520, y: 340 },
-      { x: 1016, y: 340 }, { x: 1048, y: 300 }, { x: 1080, y: 340 },
+      { x: 1050, y: 330 }, { x: 1150, y: 300 }, { x: 1220, y: 330 },
       { x: 1300, y: 210 }, { x: 1340, y: 170 }
     ],
     throwPickups: [

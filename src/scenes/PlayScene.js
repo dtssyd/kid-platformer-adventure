@@ -65,6 +65,9 @@ class PlayScene extends Phaser.Scene {
     this.platformGroup = this.physics.add.staticGroup();
     (levelData.platforms || []).forEach((span) => this._fillSpan(this.platformGroup, span.x1, span.x2, span.y, 'platform', 64, 20));
 
+    this.movingPlatformGroup = this.physics.add.group();
+    (levelData.movingPlatforms || []).forEach((p) => this.movingPlatformGroup.add(new MovingPlatform(this, p.x, p.y, p)));
+
     this.spikeGroup = this.physics.add.staticGroup();
     (levelData.spikes || []).forEach((s) => this.spikeGroup.add(new Spike(this, s.x, s.y)));
 
@@ -126,6 +129,8 @@ class PlayScene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.player, this.crateGroup);
+    this.physics.add.collider(this.player, this.movingPlatformGroup);
+    this.physics.add.collider(this.playerProjectiles, this.movingPlatformGroup, (proj) => proj.destroy());
 
     this.physics.add.overlap(this.player, this.spikeGroup, (player, spike) => player.takeDamage(1, spike.x));
     this.physics.add.overlap(this.player, this.springGroup, (player, spring) => this._onSpringOverlap(player, spring));
@@ -340,9 +345,29 @@ class PlayScene extends Phaser.Scene {
     this.player.update(input);
     this.enemyGroup.getChildren().forEach((e) => e.update());
     if (this.boss) this.boss.update();
+    this.movingPlatformGroup.getChildren().forEach((p) => p.update());
+    this._applyMovingPlatformCarry();
 
     if (this.player.y > this.levelData.groundY + 220) {
       this.player.respawnAtCheckpoint(this.levelData.playerStart.x, this.levelData.playerStart.y);
     }
+  }
+
+  // Arcade Physics collides the player with a moving platform but doesn't
+  // carry them along for free, so: if the player is standing on top of a
+  // specific platform, shift them by that platform's movement this frame.
+  _applyMovingPlatformCarry() {
+    var player = this.player;
+    this.movingPlatformGroup.getChildren().forEach((p) => {
+      if (!p.deltaX) return;
+      var standingOnIt = player.body.touching.down &&
+        player.body.bottom <= p.body.top + 6 &&
+        player.body.right > p.body.left &&
+        player.body.left < p.body.right;
+      if (standingOnIt) {
+        player.x += p.deltaX;
+        player.body.updateFromGameObject();
+      }
+    });
   }
 }

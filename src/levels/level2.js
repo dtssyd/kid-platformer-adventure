@@ -25,8 +25,16 @@
     ],
 
     spikes: [
+      // A long spike bed crossed via two independently-patrolling platforms
+      // — you have to watch both and time the jump between them, not just
+      // ride one straight across.
       { x: 1300, y: 464 }, { x: 1332, y: 464 }, { x: 1364, y: 464 },
-      { x: 1396, y: 464 }, { x: 1428, y: 464 }
+      { x: 1396, y: 464 }, { x: 1428, y: 464 }, { x: 1460, y: 464 },
+      { x: 1492, y: 464 }, { x: 1524, y: 464 }, { x: 1556, y: 464 }, { x: 1588, y: 464 }
+    ],
+    movingPlatforms: [
+      { x: 1280, y: 390, minX: 1280, maxX: 1500, speed: 75, startDirection: 1 },
+      { x: 1640, y: 390, minX: 1420, maxX: 1640, speed: 60, startDirection: -1 }
     ],
     springs: [],
     crates: [
