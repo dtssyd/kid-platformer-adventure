@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Kid Platformer Adventure</title>
+<link rel="stylesheet" href="style.css" />
+<script src="vendor/phaser.min.js"></script>
+</head>
+<body>
+<div id="game-container"></div>
+
+<!-- Game scripts, plain <script> tags (no build step, no ES modules) so this
+     runs by simply opening this file in a browser, or from any static host. -->
+<script src="src/placeholderArt.js"></script>
+<script src="src/gameState.js"></script>
+<script src="src/entities/Projectile.js"></script>
+<script src="src/entities/Pickups.js"></script>
+<script src="src/entities/Goal.js"></script>
+<script src="src/entities/Enemy.js"></script>
+<script src="src/entities/Boss.js"></script>
+<script src="src/entities/Player.js"></script>
+<script src="src/levels/level1.js"></script>
+<script src="src/levels/level2.js"></script>
+<script src="src/levels/levelsManifest.js"></script>
+<script src="src/input/TouchControls.js"></script>
+<script src="src/scenes/BootScene.js"></script>
+<script src="src/scenes/MenuScene.js"></script>
+<script src="src/scenes/PlayScene.js"></script>
+<script src="src/scenes/GameOverScene.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
