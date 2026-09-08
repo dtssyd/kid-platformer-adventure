@@ -133,6 +133,7 @@ class PlayScene extends Phaser.Scene {
     if (this._isStomp(player, foe)) {
       foe.takeDamage(1);
       player.bounceOffStomp();
+      this._spawnHitSpark(foe.x, foe.body.top);
     } else {
       player.takeDamage(foe.contactDamage, foe.x);
     }
@@ -142,12 +143,26 @@ class PlayScene extends Phaser.Scene {
     if (foe.defeated) return;
     foe.takeDamage(1);
     this.player.swordSprite.body.enable = false;
+    this._spawnHitSpark(this.player.swordSprite.x, this.player.swordSprite.y);
   }
 
   _onProjectileHitFoe(proj, foe) {
     if (proj.owner !== 'player' || foe.defeated) return;
     foe.takeDamage(proj.damage);
+    this._spawnHitSpark(proj.x, proj.y);
     proj.destroy();
+  }
+
+  _spawnHitSpark(x, y) {
+    var spark = this.add.image(x, y, 'hitSpark').setBlendMode('ADD').setScale(0.5);
+    this.tweens.add({
+      targets: spark,
+      scale: 1.6,
+      alpha: 0,
+      duration: 220,
+      ease: 'Cubic.easeOut',
+      onComplete: () => spark.destroy()
+    });
   }
 
   _onSpringOverlap(player, spring) {
@@ -189,11 +204,21 @@ class PlayScene extends Phaser.Scene {
       }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(1001);
     }
 
-    var banner = this.add.text(this.scale.width / 2, this.scale.height * 0.3, levelData.name, {
+    var banner = this.add.text(this.scale.width / 2, this.scale.height * 0.26, levelData.name, {
       fontFamily: 'sans-serif', fontSize: '30px', color: '#ffffff', backgroundColor: '#00000066',
       padding: { x: 16, y: 8 }
     }).setOrigin(0.5).setScrollFactor(0).setDepth(1002);
-    this.tweens.add({ targets: banner, alpha: 0, delay: 1400, duration: 500, onComplete: () => banner.destroy() });
+
+    var controlHint = this.add.text(this.scale.width / 2, this.scale.height * 0.26 + 46,
+      'Sword: X / ⚔️   Throw: C / ●', {
+        fontFamily: 'sans-serif', fontSize: '15px', color: '#ffffff', backgroundColor: '#00000055',
+        padding: { x: 10, y: 5 }
+      }
+    ).setOrigin(0.5).setScrollFactor(0).setDepth(1002);
+
+    [banner, controlHint].forEach((t) => {
+      this.tweens.add({ targets: t, alpha: 0, delay: 2400, duration: 600, onComplete: () => t.destroy() });
+    });
 
     this._refreshHud();
   }

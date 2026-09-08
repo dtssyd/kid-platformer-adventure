@@ -21,11 +21,26 @@ function createPlaceholderTextures(scene) {
   g.fillStyle(0x2b2b2b, 1); g.fillRect(10, 50, 8, 6); g.fillRect(22, 50, 8, 6); // shoes
   save('player', 40, 56);
 
-  // --- Sword swing hitbox visual (28x10) ---
+  // --- Sword swing hitbox visual (40x14), pivoted at its right (hilt) end ---
   reset();
-  g.fillStyle(0xd7d7e0, 1); g.fillRect(0, 3, 22, 4);
-  g.fillStyle(0x8a5a2b, 1); g.fillRect(20, 0, 8, 10);
-  save('sword', 28, 10);
+  g.fillStyle(0xf0f0f6, 1); g.fillTriangle(0, 3, 0, 11, 30, 7); // blade
+  g.fillStyle(0xd7d7e0, 1); g.fillRect(0, 5, 26, 4); // blade centerline
+  g.fillStyle(0xc9a227, 1); g.fillRect(28, 2, 4, 10); // guard
+  g.fillStyle(0x8a5a2b, 1); g.fillRect(32, 4, 8, 6); // hilt
+  save('sword', 40, 14);
+
+  // --- Hit spark (28x28), radial burst shown briefly on a successful hit ---
+  reset();
+  g.fillStyle(0xfff6c9, 1);
+  g.fillCircle(14, 14, 5);
+  for (var s = 0; s < 6; s++) {
+    var ang = (Math.PI / 3) * s;
+    var x1 = 14 + Math.cos(ang) * 6, y1 = 14 + Math.sin(ang) * 6;
+    var x2 = 14 + Math.cos(ang) * 14, y2 = 14 + Math.sin(ang) * 14;
+    g.lineStyle(3, 0xffe58a, 1);
+    g.lineBetween(x1, y1, x2, y2);
+  }
+  save('hitSpark', 28, 28);
 
   // --- Thrown item: acorn (16x16) ---
   reset();

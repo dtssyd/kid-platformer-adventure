@@ -22,6 +22,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setMaxVelocity(this.moveSpeed, 900);
 
     this.swordSprite = scene.add.sprite(x, y, 'sword');
+    this.swordSprite.setOrigin(0.88, 0.5); // pivot near the hilt, so it swings from the hand
     this.swordSprite.setVisible(false);
     scene.physics.add.existing(this.swordSprite);
     this.swordSprite.body.setAllowGravity(false);
@@ -69,6 +70,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.swordActive = true;
     this.swordSprite.setVisible(true);
     this.swordSprite.body.enable = true;
+    this.swordSprite.setScale(0.75);
+    this.swordSprite.angle = this.facing === 1 ? -60 : -120;
+
+    this.scene.tweens.add({
+      targets: this.swordSprite,
+      angle: this.facing === 1 ? 50 : 230,
+      scale: 1,
+      duration: 150,
+      ease: 'Back.easeOut'
+    });
+
     this.scene.time.delayedCall(160, () => {
       this.swordActive = false;
       this.swordSprite.setVisible(false);
