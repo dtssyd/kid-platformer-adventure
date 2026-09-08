@@ -22,7 +22,7 @@ class PlayScene extends Phaser.Scene {
     this._buildWorld(levelData);
 
     this.player = new Player(this, levelData.playerStart.x, levelData.playerStart.y);
-    this.playerProjectiles = this.physics.add.group();
+    this.playerProjectiles = this.physics.add.group({ allowGravity: false });
 
     this._buildBoss(levelData);
     this._buildGoal(levelData);
@@ -65,7 +65,11 @@ class PlayScene extends Phaser.Scene {
     this.platformGroup = this.physics.add.staticGroup();
     (levelData.platforms || []).forEach((span) => this._fillSpan(this.platformGroup, span.x1, span.x2, span.y, 'platform', 64, 20));
 
-    this.movingPlatformGroup = this.physics.add.group();
+    // allowGravity/immovable are set here on the GROUP, not just on each
+    // MovingPlatform instance — Group.add() silently resets a body's own
+    // flags back to the group's defaults, so setting them only in the
+    // entity's constructor doesn't stick once it's added to a group.
+    this.movingPlatformGroup = this.physics.add.group({ allowGravity: false, immovable: true });
     (levelData.movingPlatforms || []).forEach((p) => this.movingPlatformGroup.add(new MovingPlatform(this, p.x, p.y, p)));
 
     this.spikeGroup = this.physics.add.staticGroup();
@@ -79,10 +83,14 @@ class PlayScene extends Phaser.Scene {
 
     (levelData.signposts || []).forEach((s) => new Signpost(this, s.x, s.y));
 
-    this.coinGroup = this.physics.add.group();
+    // allowGravity:false on the group, not just the entity — see the
+    // moving-platform group above for why the entity's own setting alone
+    // isn't enough. Coins/acorns were masked by their bob tween fighting
+    // gravity every frame rather than actually being unaffected by it.
+    this.coinGroup = this.physics.add.group({ allowGravity: false });
     (levelData.coins || []).forEach((c) => this.coinGroup.add(new Coin(this, c.x, c.y)));
 
-    this.throwPickupGroup = this.physics.add.group();
+    this.throwPickupGroup = this.physics.add.group({ allowGravity: false });
     (levelData.throwPickups || []).forEach((t) => this.throwPickupGroup.add(new ThrowItemPickup(this, t.x, t.y)));
 
     this.enemyGroup = this.physics.add.group();
