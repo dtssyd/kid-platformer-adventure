@@ -373,8 +373,13 @@ class PlayScene extends Phaser.Scene {
         player.body.right > p.body.left &&
         player.body.left < p.body.right;
       if (standingOnIt) {
-        player.x += p.deltaX;
-        player.body.updateFromGameObject();
+        // Mutate the body directly (the authoritative position Phaser
+        // syncs the sprite FROM each step) rather than the sprite's
+        // transform + updateFromGameObject() — that combination left the
+        // body's internal previous-position tracking stale, which made
+        // the collider's own separation compound on top of this shift
+        // and carry the player at roughly double the platform's speed.
+        player.body.x += p.deltaX;
       }
     });
   }
