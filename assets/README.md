@@ -80,6 +80,7 @@ Prompt template:
 ## Step 3 — Tiles & objects (one square image each)
 
 - `tile_ground`, `tile_platform` — ground block / floating platform block.
+- `tile_moving_platform` — the floating panel that patrols back and forth over the wide spike beds (currently the same wood-plank look as `tile_platform` with a light blue tint — give it its own distinct look, e.g. a glowing rune-carved stone slab or a leaf raft, so it reads as "this one moves" at a glance).
 - `spike`, `spring`, `crate`, `coin`, `portal`, `flag`, `signpost`.
 - `throw_item` — the world-specific thrown item (acorn/berry — kids' choice).
 - `sword_icon`, `throw_icon`, `heart_icon` — small HUD icons.
